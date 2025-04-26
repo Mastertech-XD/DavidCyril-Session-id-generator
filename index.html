@@ -2,87 +2,324 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MASTETECH-XD PAIR CODE</title>
+  <title>MASTETECH-XD SESSION GENERATOR</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap">
   <style>
+    :root {
+      --neon-green: #0f0;
+      --neon-blue: #08f;
+      --neon-purple: #80f;
+      --dark-bg: #0a0a12;
+      --darker-bg: #050508;
+    }
+    
     body {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
-      background-color: black;
+      background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+      color: white;
+      font-family: 'Rajdhani', sans-serif;
+      overflow-x: hidden;
     }
-
+    
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon-green);
+      text-shadow: 0 0 10px var(--neon-green), 0 0 20px var(--neon-green);
+      margin-bottom: 2rem;
+      letter-spacing: 3px;
+      animation: pulse 2s infinite alternate;
+    }
+    
+    .btn-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      padding: 2rem;
+      max-width: 800px;
+    }
+    
     .btn {
-      --color: #e5f5f1;
-      --color2: rgb(0, 0, 0);
-      width: 200px;
-      padding: 0.8em 1.75em;
-      background-color: green;
-      border-radius: 6px;
-      border: .3px solid var(--color);
-      transition: .5s;
       position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      z-index: 1;
-      font-weight: 300;
-      font-size: 17px;
-      font-family: 'Roboto', 'Segoe UI', sans-serif;
+      padding: 1.2em 2em;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      border-radius: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
       text-transform: uppercase;
-      color: var(--color);
-      margin-bottom: 24px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+      z-index: 1;
+      min-width: 220px;
     }
-
-    .btn::after, .btn::before {
-      content: '';
-      display: block;
-      height: 100%;
-      width: 100%;
-      transform: skew(90deg) translate(-50%, -50%);
-      position: absolute;
-      inset: 50%;
-      left: 25%;
-      z-index: -1;
-      transition: .5s ease-out;
-      background-color: var(--color);
-    }
-
+    
     .btn::before {
-      top: -50%;
-      left: -25%;
-      transform: skew(90deg) rotate(180deg) translate(-50%, -50%);
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 0, 0.2), transparent);
+      transition: 0.5s;
+      z-index: -1;
     }
-
-    .btn:hover::before {
-      transform: skew(45deg) rotate(180deg) translate(-50%, -50%);
-    }
-
-    .btn:hover::after {
-      transform: skew(45deg) translate(-50%, -50%);
-    }
-
+    
     .btn:hover {
-      color: var(--color2);
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(0, 255, 0, 0.6);
     }
-
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
     .btn:active {
-      filter: brightness(.7);
-      transform: scale(.98);
+      transform: translateY(1px);
+    }
+    
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      border-radius: 2px;
+      background: linear-gradient(45deg, #0a0a12, #111122);
+      z-index: -2;
+    }
+    
+    .btn:nth-child(1) { --accent: var(--neon-green); }
+    .btn:nth-child(2) { --accent: var(--neon-blue); }
+    .btn:nth-child(3) { --accent: var(--neon-purple); }
+    .btn:nth-child(4) { --accent: #ff0; }
+    .btn:nth-child(5) { --accent: #f80; }
+    .btn:nth-child(6) { --accent: #f08; }
+    
+    .btn span {
+      position: relative;
+      z-index: 1;
+      transition: 0.3s;
+    }
+    
+    .btn:hover span {
+      color: var(--accent);
+      text-shadow: 0 0 5px var(--accent);
+    }
+    
+    .glow-effect {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      background: radial-gradient(circle at center, var(--accent) 0%, transparent 70%);
+      transition: 0.5s;
+      z-index: -1;
+    }
+    
+    .btn:hover .glow-effect {
+      opacity: 0.3;
+    }
+    
+    .corner {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--accent);
+      transition: 0.3s;
+    }
+    
+    .top-left {
+      top: 0;
+      left: 0;
+      border-right: none;
+      border-bottom: none;
+    }
+    
+    .top-right {
+      top: 0;
+      right: 0;
+      border-left: none;
+      border-bottom: none;
+    }
+    
+    .bottom-left {
+      bottom: 0;
+      left: 0;
+      border-right: none;
+      border-top: none;
+    }
+    
+    .bottom-right {
+      bottom: 0;
+      right: 0;
+      border-left: none;
+      border-top: none;
+    }
+    
+    .btn:hover .corner {
+      width: 20px;
+      height: 20px;
+      border-color: var(--accent);
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+    
+    /* Background effects */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    .particle {
+      position: absolute;
+      background: var(--neon-green);
+      border-radius: 50%;
+      opacity: 0.5;
+      animation: float linear infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(0) translateX(0); }
+      100% { transform: translateY(-100vh) translateX(20px); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .btn-container {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-
-  <button onclick="window.open(`/wasiqr`)" class="btn">QR Code</button>
-  <button onclick="window.open(`/pair`)" class="btn">Pair Code</button>
-  <button onclick="window.open(`https://github.com/Fearless-tech1`)" class="btn">Bot Repo</button>
-  <button onclick="window.open(`https://github.com/Fearless-tech1`)" class="btn">Plugins</button>
-  <button onclick="window.open(`https://wa.me/234743727510`)" class="btn">Contact Me</button>
-  <button onclick="window.open(`https://whatsapp.com/channel/0029VazeyYx35fLxhB5TfC3D`)" class="btn">Wa Channel</button>
+  <h1>MASTETECH-XD PORTAL</h1>
   
-
+  <div class="btn-container">
+    <button onclick="window.open('/wasiqr')" class="btn">
+      <span>QR Code</span>
+      <div class="glow-effect"></div>
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </button>
+    
+    <button onclick="window.open('/pair')" class="btn">
+      <span>Pair Code</span>
+      <div class="glow-effect"></div>
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </button>
+    
+    <button onclick="window.open('https://github.com/Fearless-tech1')" class="btn">
+      <span>Bot Repository</span>
+      <div class="glow-effect"></div>
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </button>
+    
+    <button onclick="window.open('https://github.com/Fearless-tech1')" class="btn">
+      <span>Plugins</span>
+      <div class="glow-effect"></div>
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </button>
+    
+    <button onclick="window.open('https://wa.me/234743727510')" class="btn">
+      <span>Contact Developer</span>
+      <div class="glow-effect"></div>
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </button>
+    
+    <button onclick="window.open('https://whatsapp.com/channel/0029VazeyYx35fLxhB5TfC3D')" class="btn">
+      <span>WhatsApp Channel</span>
+      <div class="glow-effect"></div>
+      <div class="corner top-left"></div>
+      <div class="corner top-right"></div>
+      <div class="corner bottom-left"></div>
+      <div class="corner bottom-right"></div>
+    </button>
+  </div>
+  
+  <div class="particles" id="particles-js"></div>
+  
+  <script>
+    // Create floating particles
+    document.addEventListener('DOMContentLoaded', function() {
+      const particlesContainer = document.getElementById('particles-js');
+      const colors = ['#0f0', '#08f', '#80f', '#ff0', '#f80', '#f08'];
+      
+      for (let i = 0; i < 30; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 5 + 1;
+        const posX = Math.random() * window.innerWidth;
+        const posY = Math.random() * window.innerHeight;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}px`;
+        particle.style.top = `${posY}px`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.background = color;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      // Add sound effect on button hover
+      const buttons = document.querySelectorAll('.btn');
+      const hoverSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-arcade-game-jump-coin-216.mp3');
+      hoverSound.volume = 0.3;
+      
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+          hoverSound.currentTime = 0;
+          hoverSound.play();
+        });
+      });
+    });
+  </script>
 </body>
 </html>
