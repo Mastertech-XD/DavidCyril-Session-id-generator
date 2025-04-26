@@ -3,213 +3,616 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mastertech-md Pair Code generator</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>MASTERTECH-MD | Pair Code Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
+    :root {
+      --neon-pink: #ff2a6d;
+      --neon-blue: #05d9e8;
+      --neon-purple: #d300c5;
+      --dark-bg: #0d0221;
+    }
+    
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark-bg);
+      color: white;
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
-      background: black;
-      font-family: Arial, sans-serif;
+      overflow: hidden;
+      position: relative;
     }
-
+    
+    /* Animated background */
+    .bg-particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-1000px) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
     .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .box {
-      width: 300px;
-      height: 320px;
-      padding: 20px;
+      width: 100%;
+      max-width: 500px;
+      padding: 2rem;
       position: relative;
+    }
+    
+    .main-title {
+      font-family: 'Orbitron', sans-serif;
       text-align: center;
-      background-color: rgb(0, 0, 0);
-      border-radius: 10px;
-      transform: perspective(1000px) rotateY(0deg);
-      box-shadow: 0 0 20px rgba(250, 249, 249, 0.7);
-      position: relative;
+      margin-bottom: 1.5rem;
+      font-size: 2.5rem;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 10px rgba(255, 42, 109, 0.3);
+      animation: glow 2s ease-in-out infinite alternate;
     }
-
-    #text {
-      color: #f6f5f5;
+    
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px var(--neon-pink), 0 0 10px var(--neon-purple);
+      }
+      to {
+        text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-purple), 0 0 30px var(--neon-blue);
+      }
     }
-
-    .input-container input {
-      color: #f1eaea;
+    
+    .box {
+      background: rgba(13, 2, 33, 0.8);
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(5, 217, 232, 0.3),
+                  0 0 40px rgba(255, 42, 109, 0.2);
+      border: 1px solid rgba(255, 42, 109, 0.2);
+      backdrop-filter: blur(10px);
+      transform-style: preserve-3d;
+      transform: perspective(1000px);
+      transition: all 0.5s ease;
     }
-
-    .centered-text {
-      color: #e9e4e4;
+    
+    .box:hover {
+      box-shadow: 0 0 30px rgba(5, 217, 232, 0.5),
+                  0 0 60px rgba(255, 42, 109, 0.3);
+      transform: perspective(1000px) rotateY(5deg) rotateX(5deg);
     }
-
+    
+    .subtitle {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
     .input-container {
       display: flex;
-      background: rgb(10, 10, 10);
-      border-radius: 1rem;
-      background: black;
-      box-shadow: black;
-      padding: 0.3rem;
-      gap: 0.3rem;
-      max-width: 300px;
-      width: 100%;
+      margin-bottom: 1.5rem;
+      position: relative;
     }
-
+    
     .input-container input {
-      border-radius: 0.8rem 0 0 0.8rem;
-      background: #e8e8e8;
-      box-shadow: inset 13px 13px 10px #dcdcdc, inset -13px -13px 10px #f4f4f4;
-      width: 100%;
-      flex-basis: 75%;
+      flex: 1;
       padding: 1rem;
       border: none;
-      border-left: 2px solid #ecf2f8;
-      color: #000000;
-      transition: all 0.2s ease-in-out;
-    }
-
-    .input-container input:focus {
-      border-left: 2px solid #ecf1f6;
-      outline: none;
-      box-shadow: inset 13px 13px 10px #f0f2f3, inset -13px -13px 10px #f4f4f4;
-    }
-
-    .input-container button {
-      flex-basis: 15%;
-      padding: 1rem;
-      background: #5935ac;
-      font-weight: 700;
-      letter-spacing: 0.3rem;
-      text-transform: uppercase;
+      border-radius: 8px 0 0 8px;
+      background: rgba(255, 255, 255, 0.1);
       color: white;
+      font-size: 1rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+    
+    .input-container input:focus {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 10px rgba(5, 217, 232, 0.5);
+    }
+    
+    .input-container button {
+      padding: 0 1.5rem;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
       border: none;
-      width: 90%;
-      border-radius: 0 1rem 1rem 0;
-      transition: all 0.2s ease-in-out;
+      border-radius: 0 8px 8px 0;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
-
+    
     .input-container button:hover {
-      background: linear-gradient(135deg, #c01736 0%, #8b17b6 100%);
+      background: linear-gradient(45deg, var(--neon-purple), var(--neon-blue));
+      transform: translateY(-2px);
     }
-
-    @media (max-width: 500px) {
+    
+    .result-container {
+      margin-top: 1.5rem;
+      text-align: center;
+      min-height: 60px;
+    }
+    
+    #pair {
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    
+    #copy {
+      cursor: pointer;
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    #copy:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    /* Music Player Styles */
+    .music-player {
+      margin-top: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      padding: 1rem;
+      border: 1px solid rgba(255, 42, 109, 0.2);
+    }
+    
+    .player-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .player-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--neon-blue);
+      font-size: 1.2rem;
+    }
+    
+    .playlist {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-bottom: 1rem;
+    }
+    
+    .track {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem;
+      border-radius: 5px;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .track:hover {
+      background: rgba(255, 42, 109, 0.1);
+    }
+    
+    .track.active {
+      background: rgba(5, 217, 232, 0.2);
+    }
+    
+    .track-number {
+      margin-right: 1rem;
+      color: var(--neon-pink);
+      font-weight: bold;
+    }
+    
+    .track-info {
+      flex: 1;
+    }
+    
+    .track-title {
+      font-weight: bold;
+    }
+    
+    .track-artist {
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+    
+    .player-controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+    }
+    
+    .control-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .control-btn:hover {
+      color: var(--neon-pink);
+      transform: scale(1.1);
+    }
+    
+    .play-pause {
+      font-size: 2rem;
+      background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .progress-container {
+      width: 100%;
+      height: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 5px;
+      margin: 1rem 0;
+      cursor: pointer;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+      border-radius: 5px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    
+    .time-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      color: #aaa;
+    }
+    
+    /* Responsive design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      .main-title {
+        font-size: 2rem;
+      }
+      
       .input-container {
         flex-direction: column;
       }
-
+      
       .input-container input {
-        border-radius: 0.8rem;
+        border-radius: 8px;
+        margin-bottom: 0.5rem;
       }
-
+      
       .input-container button {
-        padding: 0.4rem;
-        border-radius: 0.8rem;
-      }
-    }
-
-    .centered-text {
-      text-align: center;
-    }
-
-    @media (max-width: 500px) {
-      .box {
-        width: 90%; 
-      }
-    }
-
-    @media (max-width: 500px) {
-      .input-container input {
-        border-radius: 0.8rem;
-        width: 80%; 
-      }
-
-      .input-container button {
+        border-radius: 8px;
         padding: 1rem;
-        border-radius: 0.9rem;
-        width: 100%; 
       }
+    }
+    
+    /* Animations */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .pulse {
+      animation: pulse 2s infinite;
     }
   </style>
 </head>
 <body>
+  <div class="bg-particles" id="particles"></div>
+  
   <div class="container">
-    <div class="main">
-      <div class="box" id="box">
-        <div id="text">
-          <i class="fa fa-user"></i>
-          <p>
-            <h3 class="centered-text">PAIRING CODE</h3>
-            <br>
-            <h6>Made By MASTERTECH 🌝.</h6>
-            <h6>Enter Your Number with Country Code.</h6>
-            <div class="input-container">
-              <input placeholder="25474372××××" type="number" id="number" placeholder="Mf Enter your Phone Pumber with Cuntry Code" name="">
-              <button id="submit">Submit</button>
-            </div>
-            
-            <a id="waiting-message" class="centered-text" style="display: none;">Please wait a while</a>
-            <br>
-            <br>
-            <main id="pair"></main>
-          </p>
+    <h1 class="main-title">MASTERTECH-MD</h1>
+    <div class="box">
+      <p class="subtitle">WHATSAPP PAIRING CODE GENERATOR</p>
+      
+      <div class="input-container">
+        <input type="text" id="number" placeholder="Enter WhatsApp number with country code">
+        <button id="submit"><i class="fas fa-paper-plane"></i></button>
+      </div>
+      
+      <div class="result-container">
+        <div id="pair"></div>
+      </div>
+      
+      <!-- Central Cee Music Player -->
+      <div class="music-player">
+        <div class="player-header">
+          <div class="player-title">CENTRAL CEE DRILL MIX</div>
+          <div class="player-status" id="player-status">Now Playing</div>
+        </div>
+        
+        <div class="playlist" id="playlist">
+          <!-- Tracks will be added by JavaScript -->
+        </div>
+        
+        <div class="progress-container" id="progress-container">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="time-info">
+          <span id="current-time">0:00</span>
+          <span id="duration">0:00</span>
+        </div>
+        
+        <div class="player-controls">
+          <button class="control-btn" id="prev-btn"><i class="fas fa-step-backward"></i></button>
+          <button class="control-btn play-pause" id="play-btn"><i class="fas fa-play"></i></button>
+          <button class="control-btn" id="next-btn"><i class="fas fa-step-forward"></i></button>
         </div>
       </div>
     </div>
   </div>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.0.0-alpha.1/axios.min.js"></script>
   <script>
-    let a = document.getElementById("pair");
-    let b = document.getElementById("submit");
-    let c = document.getElementById("number");
-    let box = document.getElementById("box");
-
-    async function Copy() {
-      let text = document.getElementById("copy").innerText;
-      let obj = document.getElementById("copy");
-      await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
-      obj.innerText = "COPIED";
-      obj.style = "color:blue;font-weight:bold";
-      obj.size = "5";
-      setTimeout(() => {
-        obj.innerText = text;
-        obj.style = "color:white;font-weight-bold";
-        obj.size = "5";
-      }, 500);
+    // Create particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      particle.style.width = `${Math.random() * 5 + 2}px`;
+      particle.style.height = particle.style.width;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+      particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+      particle.style.animationDelay = `${Math.random() * 5}s`;
+      particlesContainer.appendChild(particle);
     }
 
-    b.addEventListener("click", async (e) => {
-      e.preventDefault();
-      if (!c.value) {
-        a.innerHTML = '<a style="color:white;font-weight:bold">Enter your WhatsApp number with Country Code</a><br><br>';
-      } else if (c.value.replace(/[^0-9]/g, "").length < 11) {
-        a.innerHTML = '<a style="color:red;font-weight:bold">Invalid Number</a><br><br>';
-      } else {
-        const Wasi_Tech = c.value.replace(/[^0-9]/g, "");
-        let bb = "";
-        let bbc = "";
-        const cc = Wasi_Tech.split('');
-        cc.map(a => {
-          bbc += a;
-          if (bbc.length == 3) {
-            bb += " " + a;
-          } else if (bbc.length == 8) {
-            bb += " " + a;
-          } else {
-            bb += a;
-          }
-        });
-        c.type = "text";
-        c.value = "+" + bb;
-        c.style = "color:black;font-size:20px";
-        a.innerHTML = '<a style="color:white;font-weight:bold">Please Wait...</a><br><br>';
-        let { data } = await axios(`/code?number=${Wasi_Tech}`);
-        let code = data.code || "Service Unavailable";
-        a.innerHTML = '<font id="copy" onclick="Copy()" style="color:red;font-weight:bold" size="5">CODE: <span style="color:white;font-weight:bold">' + code + '</span></font><br><br><br>';
+    // Pair Code Generator Logic
+    const pairElement = document.getElementById('pair');
+    const submitBtn = document.getElementById('submit');
+    const numberInput = document.getElementById('number');
+
+    async function copyToClipboard() {
+      const text = document.getElementById('copy').innerText;
+      const obj = document.getElementById('copy');
+      
+      try {
+        await navigator.clipboard.writeText(obj.innerText.replace('CODE: ', ''));
+        obj.innerText = "COPIED!";
+        obj.style.color = "var(--neon-blue)";
+        
+        setTimeout(() => {
+          obj.innerText = text;
+          obj.style.color = "white";
+        }, 2000);
+      } catch (err) {
+        console.error('Failed to copy: ', err);
       }
+    }
+
+    submitBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      if (!numberInput.value) {
+        pairElement.innerHTML = '<div style="color: var(--neon-pink)">Please enter your WhatsApp number</div>';
+        return;
+      }
+      
+      const cleanNumber = numberInput.value.replace(/[^0-9]/g, "");
+      
+      if (cleanNumber.length < 11) {
+        pairElement.innerHTML = '<div style="color: var(--neon-pink)">Invalid number (too short)</div>';
+        return;
+      }
+      
+      // Format number
+      let formattedNumber = `+${cleanNumber.substring(0, 3)} ${cleanNumber.substring(3, 6)} ${cleanNumber.substring(6, 9)} ${cleanNumber.substring(9)}`;
+      numberInput.value = formattedNumber;
+      numberInput.style.color = "var(--neon-blue)";
+      
+      pairElement.innerHTML = '<div class="pulse" style="color: var(--neon-blue)">Generating code...</div>';
+      
+      try {
+        // Simulate API call (replace with your actual API endpoint)
+        const response = await axios.get(`/code?number=${cleanNumber}`);
+        const code = response.data.code || "SERVICE_UNAVAILABLE";
+        
+        pairElement.innerHTML = `
+          <div id="copy" onclick="copyToClipboard()" style="cursor: pointer;">
+            <span style="color: var(--neon-pink)">CODE: </span>
+            <span style="color: white; font-weight: bold">${code}</span>
+          </div>
+          <div style="margin-top: 10px; font-size: 0.8rem; color: #aaa">Click to copy</div>
+        `;
+      } catch (error) {
+        pairElement.innerHTML = '<div style="color: var(--neon-pink)">Error generating code</div>';
+        console.error('Error:', error);
+      }
+    });
+
+    // Central Cee Music Player
+    const playlist = [
+      {
+        title: "Doja",
+        artist: "Central Cee",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Replace with actual URL
+      },
+      {
+        title: "Let Her Go",
+        artist: "Central Cee",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" // Replace with actual URL
+      },
+      {
+        title: "Commitment Issues",
+        artist: "Central Cee",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" // Replace with actual URL
+      },
+      {
+        title: "Loading",
+        artist: "Central Cee",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" // Replace with actual URL
+      },
+      {
+        title: "Obsessed With You",
+        artist: "Central Cee",
+        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" // Replace with actual URL
+      }
+    ];
+
+    const audio = new Audio();
+    let currentTrackIndex = 0;
+    let isPlaying = false;
+
+    // DOM elements
+    const playlistElement = document.getElementById('playlist');
+    const playBtn = document.getElementById('play-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const progressBar = document.getElementById('progress-bar');
+    const progressContainer = document.getElementById('progress-container');
+    const currentTimeElement = document.getElementById('current-time');
+    const durationElement = document.getElementById('duration');
+    const playerStatus = document.getElementById('player-status');
+
+    // Render playlist
+    function renderPlaylist() {
+      playlistElement.innerHTML = '';
+      playlist.forEach((track, index) => {
+        const trackElement = document.createElement('div');
+        trackElement.classList.add('track');
+        if (index === currentTrackIndex) {
+          trackElement.classList.add('active');
+        }
+        trackElement.innerHTML = `
+          <div class="track-number">${index + 1}</div>
+          <div class="track-info">
+            <div class="track-title">${track.title}</div>
+            <div class="track-artist">${track.artist}</div>
+          </div>
+        `;
+        trackElement.addEventListener('click', () => {
+          currentTrackIndex = index;
+          loadTrack(currentTrackIndex);
+          playTrack();
+        });
+        playlistElement.appendChild(trackElement);
+      });
+    }
+
+    // Load track
+    function loadTrack(index) {
+      const track = playlist[index];
+      audio.src = track.src;
+      playerStatus.textContent = `Now Playing: ${track.title}`;
+      renderPlaylist();
+    }
+
+    // Play track
+    function playTrack() {
+      isPlaying = true;
+      audio.play();
+      playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    }
+
+    // Pause track
+    function pauseTrack() {
+      isPlaying = false;
+      audio.pause();
+      playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
+
+    // Next track
+    function nextTrack() {
+      currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+      loadTrack(currentTrackIndex);
+      if (isPlaying) playTrack();
+    }
+
+    // Previous track
+    function prevTrack() {
+      currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+      loadTrack(currentTrackIndex);
+      if (isPlaying) playTrack();
+    }
+
+    // Update progress bar
+    function updateProgress() {
+      const { duration, currentTime } = audio;
+      const progressPercent = (currentTime / duration) * 100;
+      progressBar.style.width = `${progressPercent}%`;
+      
+      // Update time
+      const currentMinutes = Math.floor(currentTime / 60);
+      const currentSeconds = Math.floor(currentTime % 60).toString().padStart(2, '0');
+      currentTimeElement.textContent = `${currentMinutes}:${currentSeconds}`;
+    }
+
+    // Set progress
+    function setProgress(e) {
+      const width = this.clientWidth;
+      const clickX = e.offsetX;
+      const duration = audio.duration;
+      audio.currentTime = (clickX / width) * duration;
+    }
+
+    // Event listeners
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        pauseTrack();
+      } else {
+        playTrack();
+      }
+    });
+
+    nextBtn.addEventListener('click', nextTrack);
+    prevBtn.addEventListener('click', prevTrack);
+
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('ended', nextTrack);
+    progressContainer.addEventListener('click', setProgress);
+
+    // Initialize
+    loadTrack(currentTrackIndex);
+    renderPlaylist();
+
+    // Update duration
+    audio.addEventListener('loadedmetadata', () => {
+      const durationMinutes = Math.floor(audio.duration / 60);
+      const durationSeconds = Math.floor(audio.duration % 60).toString().padStart(2, '0');
+      durationElement.textContent = `${durationMinutes}:${durationSeconds}`;
     });
   </script>
 </body>
