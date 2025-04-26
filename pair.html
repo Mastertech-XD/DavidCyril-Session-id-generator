@@ -446,20 +446,26 @@
       pairElement.innerHTML = '<div class="pulse" style="color: var(--neon-blue)">Generating code...</div>';
       
       try {
-        // Simulate API call (replace with your actual API endpoint)
-        const response = await axios.get(`/code?number=${cleanNumber}`);
-        const code = response.data.code || "SERVICE_UNAVAILABLE";
+        // Make API call to your backend endpoint
+        const response = await axios.post('https://your-api-endpoint.com/generate-code', {
+          number: cleanNumber
+        });
         
-        pairElement.innerHTML = `
-          <div id="copy" onclick="copyToClipboard()" style="cursor: pointer;">
-            <span style="color: var(--neon-pink)">CODE: </span>
-            <span style="color: white; font-weight: bold">${code}</span>
-          </div>
-          <div style="margin-top: 10px; font-size: 0.8rem; color: #aaa">Click to copy</div>
-        `;
+        if (response.data && response.data.code) {
+          const code = response.data.code;
+          pairElement.innerHTML = `
+            <div id="copy" onclick="copyToClipboard()" style="cursor: pointer;">
+              <span style="color: var(--neon-pink)">CODE: </span>
+              <span style="color: white; font-weight: bold">${code}</span>
+            </div>
+            <div style="margin-top: 10px; font-size: 0.8rem; color: #aaa">Click to copy</div>
+          `;
+        } else {
+          pairElement.innerHTML = '<div style="color: var(--neon-pink)">Error: Invalid response from server</div>';
+        }
       } catch (error) {
-        pairElement.innerHTML = '<div style="color: var(--neon-pink)">Error generating code</div>';
-        console.error('Error:', error);
+        console.error('API Error:', error);
+        pairElement.innerHTML = '<div style="color: var(--neon-pink)">Error generating code. Please try again.</div>';
       }
     });
 
@@ -468,27 +474,27 @@
       {
         title: "Doja",
         artist: "Central Cee",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" // Replace with actual URL
+        src: "https://your-server.com/central-cee-doja.mp3" // Replace with actual URL
       },
       {
         title: "Let Her Go",
         artist: "Central Cee",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" // Replace with actual URL
+        src: "https://your-server.com/central-cee-let-her-go.mp3" // Replace with actual URL
       },
       {
         title: "Commitment Issues",
         artist: "Central Cee",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" // Replace with actual URL
+        src: "https://your-server.com/central-cee-commitment-issues.mp3" // Replace with actual URL
       },
       {
         title: "Loading",
         artist: "Central Cee",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" // Replace with actual URL
+        src: "https://your-server.com/central-cee-loading.mp3" // Replace with actual URL
       },
       {
         title: "Obsessed With You",
         artist: "Central Cee",
-        src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" // Replace with actual URL
+        src: "https://your-server.com/central-cee-obsessed.mp3" // Replace with actual URL
       }
     ];
 
@@ -538,13 +544,26 @@
       audio.src = track.src;
       playerStatus.textContent = `Now Playing: ${track.title}`;
       renderPlaylist();
+      
+      // Reset progress bar
+      progressBar.style.width = '0%';
+      currentTimeElement.textContent = '0:00';
     }
 
     // Play track
     function playTrack() {
       isPlaying = true;
-      audio.play();
-      playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+      audio.play()
+        .then(() => {
+          playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+        })
+        .catch(error => {
+          console.error('Playback failed:', error);
+          // Fallback for browsers that block autoplay
+          playBtn.innerHTML = '<i class="fas fa-play"></i>';
+          isPlaying = false;
+          alert('Please click play to start music (browser requires user interaction)');
+        });
     }
 
     // Pause track
@@ -608,11 +627,17 @@
     loadTrack(currentTrackIndex);
     renderPlaylist();
 
-    // Update duration
+    // Update duration when metadata is loaded
     audio.addEventListener('loadedmetadata', () => {
       const durationMinutes = Math.floor(audio.duration / 60);
       const durationSeconds = Math.floor(audio.duration % 60).toString().padStart(2, '0');
       durationElement.textContent = `${durationMinutes}:${durationSeconds}`;
+    });
+
+    // Error handling for audio
+    audio.addEventListener('error', (e) => {
+      console.error('Audio error:', e);
+      playerStatus.textContent = 'Error loading track';
     });
   </script>
 </body>
